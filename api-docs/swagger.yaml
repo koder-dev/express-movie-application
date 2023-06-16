@@ -1,0 +1,122 @@
+openapi: 3.0.0
+info:
+  title: Movie API
+  description: API to manage movie details
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api/v1
+paths:
+  /movies:
+    get:
+      summary: Get all movies
+      tags:
+        - Movies
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieListResponse'
+    post:
+      summary: Create a new movie
+      tags:
+        - Movies
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieInput'
+      responses:
+        '201':
+          description: Movie created successfully
+  /movies/{movieId}:
+    get:
+      summary: Get a specific movie by ID
+      tags:
+        - Movies
+      parameters:
+        - name: movieId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the movie
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '404':
+          description: Movie not found
+    put:
+      summary: Update a specific movie by ID
+      tags:
+        - Movies
+      parameters:
+        - name: movieId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the movie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieInput'
+      responses:
+        '200':
+          description: Movie updated successfully
+        '404':
+          description: Movie not found
+    delete:
+      summary: Delete a specific movie by ID
+      tags:
+        - Movies
+      parameters:
+        - name: movieId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the movie
+      responses:
+        '204':
+          description: Movie deleted successfully
+        '404':
+          description: Movie not found
+components:
+  schemas:
+    MovieInput:
+      type: object
+      properties:
+        movieName:
+          type: string
+        director:
+          type: string
+        rating:
+          type: string
+    Movie:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        movieName:
+          type: string
+        director:
+          type: string
+        rating:
+          type: string
+    MovieListResponse:
+      type: object
+      properties:
+        movies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Movie'
